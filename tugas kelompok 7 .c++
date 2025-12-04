@@ -79,3 +79,87 @@ void tambahPesanan() {
         cout << "Maaf, maksimal pesanan adalah " << MAX_PESANAN << " jenis menu!" << endl;
     }
 }
+
+void tampilkanPesanan() {
+    if(totalPesanan == 0) {
+        cout << "\nBelum ada pesanan!" << endl;
+        return;
+    }
+
+    cout << "\n==========================================" << endl;
+    cout << "           PESANAN SEMENTARA" << endl;
+    cout << "==========================================" << endl;
+    cout << setw(3) << "No" << setw(15) << "Menu" << setw(10) << "Qty" << setw(12) << "Subtotal" << endl;
+    cout << "------------------------------------------" << endl;
+
+    double total = 0;
+    for(int i = 0; i < totalPesanan; i++) {
+        int kode = pesananKode[i];
+        int qty = pesananQty[i];
+        double subtotal = menuHarga[kode-1] * qty;
+        total += subtotal;
+
+        cout << setw(3) << i+1 << setw(15) << menuNama[kode-1]
+             << setw(10) << qty
+             << setw(12) << subtotal << endl;
+    }
+
+    cout << "------------------------------------------" << endl;
+    cout << setw(28) << "Total: " << setw(12) << total << endl;
+    cout << "==========================================" << endl;
+}
+
+void cetakStruk() {
+    if(totalPesanan == 0) {
+        cout << "\nTidak ada pesanan untuk dicetak!" << endl;
+        return;
+    }
+
+    double subtotal = 0;
+    double pajak, totalBayar, bayar, kembalian;
+
+    for(int i = 0; i < totalPesanan; i++) {
+        int kode = pesananKode[i];
+        subtotal += menuHarga[kode-1] * pesananQty[i];
+    }
+
+    pajak = subtotal * 0.1;
+    totalBayar = subtotal + pajak;
+
+    cout << "\n===================================================" << endl;
+    cout << "                STRUK PEMBAYARAN" << endl;
+    cout << "===================================================" << endl;
+    cout << setw(15) << "Menu" << setw(10) << "Qty" << setw(12) << "Harga" << setw(12) << "Subtotal" << endl;
+    cout << "----------------------------------------------------" << endl;
+
+    for(int i = 0; i < totalPesanan; i++) {
+        int kode = pesananKode[i];
+        cout << setw(15) << menuNama[kode-1]
+             << setw(10) << pesananQty[i]
+             << setw(12) << menuHarga[kode-1]
+             << setw(12) << menuHarga[kode-1] * pesananQty[i] << endl;
+    }
+
+    cout << "---------------------------------------------------" << endl;
+    cout << setw(37) << "Subtotal: " << setw(12) << subtotal << endl;
+    cout << setw(37) << "Pajak (10%): " << setw(12) << pajak << endl;
+    cout << setw(37) << "Total Bayar: " << setw(12) << totalBayar << endl;
+
+    cout << "\nMasukkan jumlah uang pembayaran: ";
+    cin >> bayar;
+
+    if(bayar < totalBayar) {
+        cout << "Uang pembayaran kurang! Kurang: " << (totalBayar - bayar) << endl;
+        return;
+    }
+
+    kembalian = bayar - totalBayar;
+
+    cout << setw(37) << "Bayar: " << setw(12) << bayar << endl;
+    cout << setw(37) << "Kembalian: " << setw(12) << kembalian << endl;
+    cout << "==========================================" << endl;
+    cout << "      TERIMA KASIH ATAS KUNJUNGANNYA!" << endl;
+    cout << "==========================================" << endl;
+
+    totalPesanan = 0;
+}
